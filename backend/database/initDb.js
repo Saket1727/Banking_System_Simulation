@@ -15,12 +15,15 @@ async function initDatabase() {
 
     // Step 1: Connect to server without database to run DDL
     const connection = await mysql.createConnection({
-        host,
-        port,
-        user,
-        password,
-        multipleStatements: true
-    });
+    host,
+    port,
+    user,
+    password,
+    ssl: process.env.DB_SSL === 'true'
+        ? { rejectUnauthorized: false }
+        : undefined,
+    multipleStatements: true
+});
 
     try {
         console.log('[InitDB] Reading schema.sql...');

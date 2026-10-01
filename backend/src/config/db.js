@@ -10,28 +10,11 @@ const pool = mysql.createPool({
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'banking_simulation',
+    ssl: process.env.DB_SSL === 'true'
+        ? { rejectUnauthorized: false }
+        : undefined,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
-    decimalNumbers: true // Return MySQL DECIMAL types as JavaScript numbers for clean calculations
+    decimalNumbers: true
 });
-
-/**
- * Verifies connectivity to the database
- */
-async function testConnection() {
-    try {
-        const connection = await pool.getConnection();
-        console.log(`[Database] Successfully connected to MySQL database: ${process.env.DB_NAME || 'banking_simulation'}`);
-        connection.release();
-        return true;
-    } catch (error) {
-        console.error('[Database] Connection failed:', error.message);
-        throw error;
-    }
-}
-
-module.exports = {
-    pool,
-    testConnection
-};
