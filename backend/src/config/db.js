@@ -18,3 +18,21 @@ const pool = mysql.createPool({
     queueLimit: 0,
     decimalNumbers: true
 });
+// Test database connection
+const testConnection = async () => {
+    try {
+        const connection = await pool.getConnection();
+        console.log('Database connection successful');
+        connection.release();
+        return true;
+    } catch (error) {
+        console.error('Database connection failed:', error.message);
+        return false;
+    }
+};
+
+// Export database pool and connection test
+module.exports = {
+    pool,
+    testConnection
+};
